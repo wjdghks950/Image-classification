@@ -1,0 +1,3 @@
+#!/bin/bash -x
+
+CUDA_VISIBLE_DEVICES=$1 python3 train.py
