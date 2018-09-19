@@ -47,13 +47,15 @@ def main():
         sess.run(tf.global_variables_initializer())
 
         for epoch in range(opt['epoch']):
-            for i in range(1, opt['batch_size'] + 1):
-               for batch_features, batch_labels in load_preprocess_training_batch(i, opt['num_batch']):
+            for i in range(1, opt['num_batch'] + 1):
+               for batch_features, batch_labels in load_preprocess_training_batch(i, opt['batch_size']):
                     sess.run(optim, feed_dict={x: batch_features, y: batch_labels, dropout_p: opt['dropout_p']})
+                    print('Batch #{}'.format(i))
                    # m.train_neural_network(sess, optim, opt['dropout_p'], batch_features, batch_labels)
                print('Epoch {:>2}, CIFAR10 Batch {}:'.format(epoch+1, i), end='')
                loss = sess.run(cost, feed_dict={x: batch_features, y: batch_labels, dropout_p: opt['dropout_p']})
                valid_acc = sess.run(acc, feed_dict={x: valid_features, y: valid_labels, dropout_p: opt['dropout_p']})
+               print('Loss: {:>10.4f} Validation Accuracy: {:.6f}'.format(loss, valid_acc))
               # m.print_stats(sess, batch_features, batch_labels, cost, acc)
 
         saver = tf.train.Saver()

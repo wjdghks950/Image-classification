@@ -10,6 +10,7 @@ from random import shuffle
 from urllib.request import urlretrieve
 from os.path import isfile, isdir
 from tqdm import tqdm
+import matplotlib.pyplot as plt
 
 
 IMG_SIZE = 32 #CIFAR data image will be 30 x 30; any changes to the data dimension can be addressed by changing IMG_SIZE
@@ -47,13 +48,13 @@ def DownloadData(datapath):
     # If dataset is not already downloaded yet, download it
     print("Checking for downloaded dataset...")
 
-    if not isfile('./CIFAR_Train_Data/cifar-10-python.tar.gz'):
+    if not isfile('./cifar-10-python.tar.gz'):
         with DownloadProgress(unit='B', unit_scale=True, miniters=1, desc='CIFAR-10 Dataset') as progressbar:
             urlretrieve('https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz',
-                        './CIFAR_Train_Data/cifar-10-python.tar.gz', progressbar.hook)
+                        '.cifar-10-python.tar.gz', progressbar.hook)
 
     if not isdir(datapath):
-        with tarfile.open('./CIFAR_Train_Data/cifar-10-python.tar.gz') as tar:
+        with tarfile.open('.cifar-10-python.tar.gz') as tar:
             tar.extractall()
             tar.close()
 
@@ -93,6 +94,8 @@ def display_stats(datapath, batch_idx, sample_idx):
     print('Image - Min Value: {} Max Value: {}'.format(sample_img.min(), sample_img.max()))
     print('Image - Shape: {}'.format(sample_img.shape))
     print('Label - Label Id: {} Name: {}'.format(sample_lbl, label_names[sample_lbl]))
+
+    plt.imshow(sample_img)
 
 def normalize(x):
     #Using min-max normalization to normalize the input data
@@ -142,7 +145,7 @@ def preprocess_and_save_data(datapath, normalize, one_hot_encode):
                 with open(datapath + '/test_batch', mode='rb') as file:
                     batch = pickle.load(file, encoding='latin1')
             except IOError:
-                print('Error occurred whlie opening the following file:{}'.format(TEST_DIR + '/test_batch'))
+                print('Error occurred whlie opening the following file:{}'.format(datapath + '/test_batch'))
 
         test_features = batch['data'].reshape((len(batch['data']), 3, 32, 32)).transpose(0, 2, 3, 1)
         test_labels = batch['labels'] 
