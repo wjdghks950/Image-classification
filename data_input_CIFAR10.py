@@ -30,7 +30,8 @@ def load_label_names():
 
 def DataLoader(datapath, batch_idx):
 # For loading data for the RadarNet model
-    print(os.path.exists(datapath))
+    print('Valid datapath:{}'.format(os.path.exists(datapath)))
+
     if os.path.exists(datapath):
         try:
             with open(datapath + '/data_batch_' + str(batch_idx), mode='rb') as file:
@@ -52,6 +53,8 @@ def DownloadData(datapath):
         with DownloadProgress(unit='B', unit_scale=True, miniters=1, desc='CIFAR-10 Dataset') as progressbar:
             urlretrieve('https://www.cs.toronto.edu/~kriz/cifar-10-python.tar.gz',
                         '.cifar-10-python.tar.gz', progressbar.hook)
+    else:
+        pass
 
     if not isdir(datapath):
         with tarfile.open('.cifar-10-python.tar.gz') as tar:
