@@ -1,10 +1,11 @@
 import tensorflow as tf
 from model import RadarNet
 from data_input_CIFAR10 import * 
+from preprocess_cv2 import ImgProcess
 
 NUM_CLASSES = 10 
 save_model_path = './convnet_model_saved'
-cifar10_datapath = '/home/jeonghwan/Desktop/CIFAR10_demo/cifar-10-batches-py'
+cifar10_datapath = '/home/jeonghwan/Desktop/CIFAR10_Jeonghwan/cifar-10-batches-py'
 
 def main():
     opt = {}
@@ -51,7 +52,7 @@ def main():
                 for batch_features, batch_labels in load_preprocess_training_batch(i, opt['batch_size']):
                     sess.run(optim, feed_dict={x: batch_features, y: batch_labels, dropout_p: opt['dropout_p']})
 
-                print('Epoch {:>2}, CIFAR10 Batch {}:'.format(epoch+1, i), end='')
+                print('Epoch {:>3}, CIFAR10 Batch {}:'.format(epoch+1, i), end='')
 
                 loss = sess.run(cost, feed_dict={x: batch_features, y: batch_labels, dropout_p: opt['dropout_p']})
                 valid_acc = sess.run(acc, feed_dict={x: valid_features, y: valid_labels, dropout_p: opt['dropout_p']})
